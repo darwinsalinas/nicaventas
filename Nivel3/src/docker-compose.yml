@@ -1,0 +1,37 @@
+version: '3'
+services:
+  nicaventas-db:
+    image: postgres
+    restart: always
+    container_name: "nicaventas-db"
+    env_file:
+      - .env
+    ports:
+      - "54320:5432"
+    # Activar este volume si se quieren rellenar la base de datos
+    # volumes:
+    #   - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    # volumes:
+    #   - my_dbdata:/var/lib/postgresql/data
+
+  nicaventas-us:
+    restart: always
+    depends_on:
+      - nicaventas-db
+    environment:
+      WAIT_HOSTS: nicaventas-db:5432
+    container_name: "nicaventas-us"
+    image: darwinsalinas/nicaventas-disponibilidad-nivel3
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    command: flask run --host=0.0.0.0
+
+  redis:
+    image: redis
+    expose:
+      - 6379
+
+volumes:
+  my_dbdata:
