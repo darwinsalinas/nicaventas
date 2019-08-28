@@ -481,6 +481,493 @@ Ahora vemos que el producto solicitado para el paí y ciudad debe venderse mas c
 ```
 
 ## Construcción de los microservicios
+Los servicios para el API fueron creados usando `Python` y `Flask` y algunas librerías de Python como Flask-SQLAlchemy, requests, redis, a continuación el código fuente de Python para cada uno de los micro servicios
 
+### Servicio de consulta de disponibilidad
+
+app.py
+```python
+from flask import jsonify, request, escape
+from config import db, r, create_app
+from models import Country, City
+import os
+
+app = create_app()
+app.app_context().push()
+
+@app.route('/')
+def info():
+    info = {
+        'id': 'nica-ventas-disponibilidad',
+        'version': '0.1',
+        'status': 'development'
+    }
+    return jsonify(info)
+
+@app.route('/active')
+def city_is_active():
+    country = request.args.get("country", "ni")
+    city = request.args.get("city", "Managua")
+    info = {
+        "active": False,
+        "country": country,
+        "city": city,
+        'cache': 'hit'
+    }
+    in_cache = get_from_cache(country, city)
+    if in_cache:
+        info['active'] = bool(in_cache == b'1')
+        return jsonify(info)
+
+    country_rs = Country.query.filter(Country.country == country).one_or_none()
+    if country_rs is not None:
+        city_rs = City.query.filter(City.country_id == country_rs.id).filter(City.city == city).one_or_none()
+
+        if city_rs is not None:
+            info['active'] = city_rs.active
+            info['country'] = country_rs.country
+            info['city'] = city_rs.city
+            info['cache'] = 'miss'
+            store_on_cache(country_rs.country, city_rs.city, city_rs.active)
+
+    return jsonify(info)
+
+@app.route('/active', methods=['POST'])
+def store_city():
+    country = request.json.get("country", "ni")
+    city = request.json.get("city", "Managua")
+    active = request.json.get("active", False)
+    country_rs = Country.query.filter(Country.country == country).one_or_none()
+
+    if country_rs is not None:
+        city_rs = City.query.filter(City.country_id == country_rs.id).filter(City.city == city).one_or_none()
+
+        if city_rs is None:
+            city_rs = City(city=city, active=active,country_id=country_rs.id)
+            db.session.add(city_rs)
+            db.session.commit()
+
+    else:
+        country_rs = Country(country=country)
+        db.session.add(country_rs)
+        db.session.commit()
+
+        city_rs = City(city=city, active=active,country_id=country_rs.id)
+        db.session.add(city_rs)
+        db.session.commit()
+
+    info = {
+        "active": active,
+        "country": country,
+        "city": city
+    }
+    delete_all_from_cache()
+    return jsonify(info)
+
+@app.route('/active', methods=['PUT', 'PATCH'])
+def update_city():
+    token = request.headers.get('Authorization', False)
+    if (token != "Bearer " + os.environ['TOKEN']):
+        return not_allowed(403)
+
+    country = request.json.get("country", "ni")
+    city = request.json.get("city", "Managua")
+    active = request.json.get("active", False)
+
+    country_rs = Country.query.filter(Country.country == country).one_or_none()
+    if country_rs is not None:
+        city_rs = City.query.filter(City.country_id == country_rs.id).filter(City.city == city).one_or_none()
+
+        if city_rs is not None:
+            city_rs.active = active
+            db.session.commit()
+
+            info = {
+                "active": active,
+                "country": country,
+                "city": city
+            }
+            delete_all_from_cache()
+            return jsonify(info)
+        return page_not_found(404)
+
+    return page_not_found(404)
+
+def store_on_cache(country, city, data):
+    chache_name = create_cache_name(country, city)
+    value = 0
+    if data:
+        value = 1
+    r.set(escape(chache_name), value)
+
+def get_from_cache(country, city):
+    chache_name = create_cache_name(country, city)
+    data = r.get(escape(chache_name))
+    return data
+
+def delete_from_cache(country, city):
+    chache_name = create_cache_name(country, city)
+    r.delete(escape(chache_name))
+
+def delete_all_from_cache():
+    keys = r.keys('*')
+    for k in keys:
+        print('Deleting:', k, 'result is')
+        r.delete(k)
+
+def create_cache_name(country, city):
+    cache_name = '{0}_{1}'.format(country, city)
+    return cache_name
+
+@app.errorhandler(404)
+def page_not_found(e):
+    info = {
+        'app-id': 'nica-ventas-disponibilidad',
+        'version': '0.1',
+        'status': 'development',
+        "title": "Error 404, Not Found",
+        "detail": "Error 404, Not Found",
+        "message": "Erorr 404, Not Found",
+        "status": 404,
+        "code": 404
+    }
+
+    return jsonify(info)
+
+@app.errorhandler(403)
+def not_allowed(e):
+    info = {
+        'app-id': 'nica-ventas-disponibilidad',
+        'version': '0.1',
+        'status': 'development',
+        "title": "Error 403, Forbidden",
+        "detail": "Error 403, Forbidden",
+        "message": "Erorr 403, Forbidden",
+        "status": 403,
+        "code": 403
+    }
+
+    return jsonify(info)
+
+if __name__ == '__main__':
+    dbstatus = False
+    while dbstatus == False:
+        try:
+            db.create_all()
+        except:
+            time.sleep(2)
+        else:
+            dbstatus = True
+    app.run(debug=True, host='0.0.0.0', port='8000')
+```
+
+config.py
+```python
+import os
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import redis
+
+class Config(object):
+    DEBUG = False
+    TESTING = False
+    DB_NAME = os.environ['POSTGRES_DB']
+    DB_USER = os.environ['POSTGRES_USER']
+    DB_PASS = os.environ['POSTGRES_PASSWORD']
+    DB_SERVICE = os.environ['DB_SERVICE']
+    DB_PORT = os.environ['DB_PORT']
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{0}:{1}@{2}:{3}/{4}'.format(
+        DB_USER, DB_PASS, DB_SERVICE, DB_PORT, DB_NAME
+    )
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+class StagingConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+db = SQLAlchemy()
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(os.environ['APP_SETTINGS'])
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+
+    return app
+
+r = redis.Redis(host=os.environ['REDIS_LOCATION'], port=os.environ['REDIS_PORT'], db=0)
+```
+
+models.py
+```python
+from datetime import datetime
+from config import db
+
+
+class Country(db.Model):
+    __tablename__ = 'countries'
+    id = db.Column(db.Integer, primary_key=True)
+    country = db.Column(db.String(128), unique=True)
+
+class City(db.Model):
+    __tablename__ = 'cities'
+    id = db.Column(db.Integer, primary_key=True)
+    city = db.Column(db.String(128))
+    active = db.Column(db.Boolean)
+    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
+```
+
+### Servicio de consulta condiciones de venta
+
+app.py
+```python
+from flask import jsonify, request, escape
+from config import db, r, create_app
+import os, requests, json
+from models import Product, Rule
+
+app = create_app()
+app.app_context().push()
+
+@app.route('/')
+def info():
+    info = {
+        'id': 'nica-ventas-condiciones',
+        'version': '0.1',
+        'status': 'development'
+    }
+    return jsonify(info)
+
+@app.route('/price/<sku>') # /price/<:sku>
+def get_price(sku):
+    producto_rs = Product.query.filter(Product.sku == sku).one_or_none()
+    if producto_rs is not None:
+        producto = {
+            "description": producto_rs.description,
+            "price": producto_rs.price
+        }
+        return jsonify(producto)
+
+    return page_not_found(404)
+
+@app.route('/quote', methods=['POST'])
+def get_quote():
+    country = request.json.get("country", False)
+    city = request.json.get("city", False)
+    sku = request.json.get("sku", False)
+
+    if country and city and sku:
+        in_cache = get_from_cache(country, city, sku)
+        if in_cache:
+            data_json = json.loads(in_cache)
+            data_json['cache'] = 'hit'
+            return jsonify(data_json)
+
+        weather_id = get_weather_id(country, city)
+        rule = get_rule(country, city, sku, weather_id)
+
+        variation = 1
+        if rule is not None:
+            variation = rule.variation
+
+        producto_rs = Product.query.filter(Product.sku == sku).one_or_none()
+
+        resp = {
+            "sku": sku,
+            "description": producto_rs.description,
+            "country": country,
+            "city": city,
+            "base_price": producto_rs.price,
+            "variation": variation,
+            "cache": 'miss'
+        }
+        store_on_cache(country, city, sku, resp)
+        return jsonify(resp)
+
+    return page_not_found(404)
+
+def get_rule(country, city, sku, weather_id):
+    rule = Rule.query.filter(Rule.country == country)\
+        .filter(Rule.city == city)\
+        .filter(weather_id >= Rule.min_condition )\
+        .filter(weather_id  <= Rule.max_condition)\
+        .filter(Rule.sku == sku)\
+        .order_by(Rule.id.desc()) \
+        .first()
+
+    return rule
+
+def get_weather_id(country, city):
+    url = create_url(country, city)
+    response = requests.get(url)
+    weather_id = 0
+    if response.status_code == 200:
+        weather_json = response.json()
+        weather_id = weather_json['weather'][0]['id']
+
+    return weather_id
+
+def create_url(country, city):
+    url_base = 'http://api.openweathermap.org'
+    api_version = 'data/2.5/weather'
+    api_key = app.config['API_KEY_OWM']
+    url = '{0}/{1}?q={2},{3}&APPID={4}&units=metric'.format(
+        url_base,
+        api_version,
+        city,
+        country,
+        api_key
+    )
+    return url
+
+def store_on_cache(country, city, sku, data):
+    chache_name = create_cache_name(country, city, sku)
+    value = json.dumps(data)
+    r.set(escape(chache_name), value, ex=300)
+
+def get_from_cache(country, city, sku,):
+    chache_name = create_cache_name(country, city, sku)
+    data = r.get(escape(chache_name))
+    return data
+
+def delete_from_cache(country, city, sku):
+    chache_name = create_cache_name(country, city, sku)
+    r.delete(escape(chache_name))
+
+def delete_all_from_cache():
+    keys = r.keys('*')
+    for k in keys:
+        print('Deleting:', k, 'result is')
+        r.delete(k)
+
+def create_cache_name(country, city, sku):
+    cache_name = '{0}_{1}_{2}'.format(country, city, sku)
+    return cache_name
+
+@app.errorhandler(404)
+def page_not_found(e):
+    info = {
+        'app-id': 'nica-ventas-condiciones',
+        'version': '0.1',
+        'status': 'development',
+        "title": "Error 404, Not Found",
+        "detail": "Error 404, Not Found",
+        "message": "Erorr 404, Not Found",
+        "status": 404,
+        "code": 404
+    }
+
+    return jsonify(info)
+
+if __name__ == '__main__':
+    dbstatus = False
+    while dbstatus == False:
+        try:
+            db.create_all()
+        except:
+            time.sleep(2)
+        else:
+            dbstatus = True
+    app.run(debug=True, host='0.0.0.0', port='5001')
+```
+
+config.py
+```python
+import os
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import redis
+
+class Config(object):
+    DEBUG = False
+    TESTING = False
+    API_KEY_OWM = os.environ['API_KEY_OWM']
+    DB_NAME = os.environ['POSTGRES_DB']
+    DB_USER = os.environ['POSTGRES_USER']
+    DB_PASS = os.environ['POSTGRES_PASSWORD']
+    DB_SERVICE = os.environ['DB_SERVICE']
+    DB_PORT = os.environ['DB_PORT']
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{0}:{1}@{2}:{3}/{4}'.format(
+        DB_USER, DB_PASS, DB_SERVICE, DB_PORT, DB_NAME
+    )
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+class StagingConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+db = SQLAlchemy()
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(os.environ['APP_SETTINGS'])
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+
+    return app
+
+r = redis.Redis(host=os.environ['REDIS_LOCATION'], port=os.environ['REDIS_PORT'], db=0)
+```
+
+models.py
+```python
+from datetime import datetime
+from config import db
+
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer, primary_key=True)
+    sku = db.Column(db.String(128), unique=True)
+    description = db.Column(db.String(128))
+    price = db.Column(db.Float, default=0)
+
+class Rule(db.Model):
+    __tablename__ = 'rules'
+    id = db.Column(db.Integer, primary_key=True)
+    country = db.Column(db.String(128))
+    city = db.Column(db.String(128))
+    sku = db.Column(db.String(128))
+    min_condition = db.Column(db.Integer, default=0)
+    max_condition = db.Column(db.Integer, default=0)
+    variation = db.Column(db.Float, default=0)
+```
+
+### El archivo `requirements.txt`
+Se puede utilizar el mismo contendio para el archivo requirements de ambos servicios:
+```
+alembic==1.0.11
+Click==7.0
+Flask==1.1.1
+Flask-Migrate==2.5.2
+Flask-SQLAlchemy==2.4.0
+itsdangerous==1.1.0
+Jinja2==2.10.1
+Mako==1.1.0
+MarkupSafe==1.1.1
+psycopg2-binary==2.8.3
+python-dateutil==2.8.0
+python-editor==1.0.4
+redis==3.2.1
+requests
+six==1.12.0
+SQLAlchemy==1.3.6
+Werkzeug==0.15.5
+```
+
+[Repositorio con el código fuente del proyecto](url)
 
 

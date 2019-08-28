@@ -5,7 +5,6 @@ from models import Product, Rule
 
 app = create_app()
 app.app_context().push()
-# db.create_all(app=create_app())
 
 @app.route('/')
 def info():
