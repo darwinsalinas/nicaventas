@@ -4,7 +4,7 @@
  - Desarrollar un microservicio en `flask` que implemente la llamada `[GET] /active` con una respuesta _dummy_ fija
  - Crear una imagen docker que contenga dicho microservicio y publicarla en `dockerhub`
 
-#### Procedimiento realizado para la creaion del API/Microservicio
+#### Procedimiento realizado para crear el API/Microservicio
 Para completar esta parte se desarrolló el API(microservicio) que responde una respuesta fija, en este caso el API está preparado para recibir dos parámetros(country y city) por medio de la URL en el endpoint `/active`
 
 La estructura de carpetas y archivos para nuestra aplicación Flask es la siguiente:
@@ -49,7 +49,7 @@ En el endpoint `/active` la aplicación responde con un json de acuerdo a la  es
     "country": "ni"
 }
 
-```	
+```
 En este caso el endpoint `/active` está preparado para recibir dos parámetros de tipo GET(por medio de la URL) pero la respuesta NO proviene de la base de datos, sino que solamente muestra con cierto formato los datos que han sido enviados como parámetros, esto es porque en la aplicación flask se reciben los argumentos de esta manera:
 
 ```python
