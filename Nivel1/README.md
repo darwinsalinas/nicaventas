@@ -69,7 +69,7 @@ Como se puede apreciar en el fragmento de código anterior simplemente se recibe
 
 
 
-#### Procedimiento realizado para la creación y publciación de la imagen de Docker
+#### Procedimiento realizado para la creación y publicación de la imagen de Docker
 - URL de dockerhub [(https://hub.docker.com/r/darwinsalinas/nicaventasnivel1)](https://hub.docker.com/r/darwinsalinas/nicaventasnivel1)
 
 
