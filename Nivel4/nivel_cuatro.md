@@ -213,43 +213,100 @@ CREATE TABLE "public"."rules" (
 );
 
 INSERT INTO "public"."countries"("id", "country") VALUES (1, 'ni');
-INSERT INTO "public"."cities"("id", "city", "active", "country_id") VALUES (1, 'Leon', 't', 1);
-INSERT INTO "public"."cities"("id", "city", "active", "country_id") VALUES (2, 'Chinandega', 't', 1);
-INSERT INTO "public"."cities"("id", "city", "active", "country_id") VALUES (3, 'Matagalpa', 't', 1);
-INSERT INTO "public"."cities"("id", "city", "active", "country_id") VALUES (4, 'Managua', 't', 1);
-INSERT INTO "public"."cities"("id", "city", "active", "country_id") VALUES (5, 'Granada', 't', 1);
+INSERT INTO "public"."cities"("city", "active", "country_id") VALUES ('Leon', 't', 1);
+INSERT INTO "public"."cities"("city", "active", "country_id") VALUES ('Chinandega', 't', 1);
+INSERT INTO "public"."cities"("city", "active", "country_id") VALUES ('Matagalpa', 't', 1);
+INSERT INTO "public"."cities"("city", "active", "country_id") VALUES ('Managua', 't', 1);
+INSERT INTO "public"."cities"("city", "active", "country_id") VALUES ('Granada', 't', 1);
 
-INSERT INTO "public"."products"("id", "sku", "description", "price") VALUES (1, 'AZ00001', 'Paraguas de señora estampado', 10);
-INSERT INTO "public"."products"("id", "sku", "description", "price") VALUES (2, 'AZ00002', 'Helado de sabor fresa', 1);
+INSERT INTO "public"."products"("sku", "description", "price") VALUES ('AZ00001', 'Paraguas de señora estampado', 10);
+INSERT INTO "public"."products"("sku", "description", "price") VALUES ('AZ00002', 'Helado de sabor fresa', 1);
 
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (1, 'ni', 'Leon', 'AZ00001', 500, 599, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (2, 'ni', 'Leon', 'AZ00002', 500, 599, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (3, 'ni', 'Leon', 'AZ00002', 800, 810, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (4, 'ni', 'Leon', 'AZ00001', 800, 810, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (5, 'ni', 'Managua', 'AZ00001', 500, 599, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (6, 'ni', 'Managua', 'AZ00002', 500, 599, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (7, 'ni', 'Managua', 'AZ00002', 800, 810, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (8, 'ni', 'Managua', 'AZ00001', 800, 810, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (9, 'ni', 'Chinandega', 'AZ00001', 500, 599, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (10, 'ni', 'Chinandega', 'AZ00002', 500, 599, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (11, 'ni', 'Chinandega', 'AZ00002', 800, 810, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (12, 'ni', 'Chinandega', 'AZ00001', 800, 810, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (13, 'ni', 'Bluefields', 'AZ00001', 500, 599, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (14, 'ni', 'Bluefields', 'AZ00002', 500, 599, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (15, 'ni', 'Bluefields', 'AZ00002', 800, 810, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (16, 'ni', 'Bluefields', 'AZ00001', 800, 810, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (17, 'ni', 'Nueva Guinea', 'AZ00001', 500, 599, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (18, 'ni', 'Nueva Guinea', 'AZ00002', 500, 599, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (19, 'ni', 'Nueva Guinea', 'AZ00002', 800, 810, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (20, 'ni', 'Nueva Guinea', 'AZ00001', 800, 810, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (21, 'ni', 'Juigalpa', 'AZ00001', 500, 599, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (22, 'ni', 'Juigalpa', 'AZ00002', 500, 599, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (23, 'ni', 'Juigalpa', 'AZ00002', 800, 810, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (24, 'ni', 'Juigalpa', 'AZ00001', 800, 810, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (25, 'ni', 'Rivas', 'AZ00001', 500, 599, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (26, 'ni', 'Rivas', 'AZ00002', 500, 599, 0.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (27, 'ni', 'Rivas', 'AZ00002', 800, 810, 1.5);
-INSERT INTO "public"."rules"("id", "country", "city", "sku", "min_condition", "max_condition", "variation") VALUES (28, 'ni', 'Rivas', 'AZ00001', 800, 810, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Leon', 'AZ00001', 500, 599, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Leon', 'AZ00002', 500, 599, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Leon', 'AZ00002', 800, 810, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Leon', 'AZ00001', 800, 810, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Managua', 'AZ00001', 500, 599, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Managua', 'AZ00002', 500, 599, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Managua', 'AZ00002', 800, 810, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Managua', 'AZ00001', 800, 810, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Chinandega', 'AZ00001', 500, 599, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Chinandega', 'AZ00002', 500, 599, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Chinandega', 'AZ00002', 800, 810, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Chinandega', 'AZ00001', 800, 810, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Bluefields', 'AZ00001', 500, 599, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Bluefields', 'AZ00002', 500, 599, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Bluefields', 'AZ00002', 800, 810, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Bluefields', 'AZ00001', 800, 810, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Nueva Guinea', 'AZ00001', 500, 599, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Nueva Guinea', 'AZ00002', 500, 599, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Nueva Guinea', 'AZ00002', 800, 810, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Nueva Guinea', 'AZ00001', 800, 810, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Juigalpa', 'AZ00001', 500, 599, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Juigalpa', 'AZ00002', 500, 599, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Juigalpa', 'AZ00002', 800, 810, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Juigalpa', 'AZ00001', 800, 810, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Rivas', 'AZ00001', 500, 599, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Rivas', 'AZ00002', 500, 599, 0.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Rivas', 'AZ00002', 800, 810, 1.5);
+INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_condition", "variation") VALUES ('ni', 'Rivas', 'AZ00001', 800, 810, 0.5);
+```
+
+### El archivo dcoker-compose
+Para poner en funcionamiento los dos micro servicios, mas la base de datos y el servicio de cache con un solo comando, en este ejemplo se hace uso del orquestador docker compose, compose utiliza un archivo YML para configurar y arrancar los servicios de la aplicación.
+
+A continuación las lineas necesarias en el archivo `docker-compose.yml`
+```bash
+version: '3'
+services:
+  nicaventas-db:
+    restart: always
+    image: postgres
+    container_name: "nicaventas-db"
+    env_file:
+      - .env
+    ports:
+      - "54320:5432"
+    volumes:
+      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+    # volumes:
+    #   - my_dbdata:/var/lib/postgresql/data
+
+  nicaventas-disponibilidad:
+    restart: always
+    depends_on:
+      - nicaventas-db
+    environment:
+      WAIT_HOSTS: nicaventas-db:5432
+    container_name: "nicaventas-disponibilidad-us"
+    image: darwinsalinas/nicaventas-disponibilidad-nivel4
+    env_file:
+    - .env
+    ports:
+      - 5000:5000
+    command: flask run --host=0.0.0.0
+
+  nicaventas-condiciones:
+    restart: always
+    depends_on:
+      - nicaventas-db
+    environment:
+      WAIT_HOSTS: nicaventas-db:5432
+    container_name: "nicaventas-condiciones-us"
+    image: darwinsalinas/nicaventas-condiciones-nivel4
+    env_file:
+    - .env
+    ports:
+      - 5001:5000
+    command: flask run --host=0.0.0.0
+
+  redis:
+    image: redis
+    expose:
+      - 6379
+
+volumes:
+  my_dbdata:
 ```
 
 Ya con estos archivos podemos correr nuestros servicios con la siguiente instrucción:
@@ -273,27 +330,157 @@ docker logs -f nicaventas-db
 
 ## Probar el funcionamiento de los microservicios
 
+### Servicio de consulta de disponibilidad de venta
 
-Probar con `curl localhost:8000/active?city=leon&country=ni`. La respuesta debe ser una respuesta JSON válida conforme a la especificación del servicio.
+Probar con Postman, el navegador o tambien lo puedes hacer con: `curl localhost:5000/active?city=leon&country=ni`. La respuesta que devuelve debe ser una respuesta JSON como esto:
+```bash
+[1] 12962
+{
+  "active": false,
+  "cache": "hit",
+  "city": "leon",
+  "country": "ni"
+}
+[1]  + 12962 done       curl localhost:5000/active?city=leon
+```
+
+Para `guardar` un nuevo registro en la base de datos podemos ejecutar esta linea en la terminal:
+```bash
+curl -X POST -d '{"city":"ElRama","country":"ni","active":true}' -H "Content-Type: application/json" localhost:5000/active
+```
+Esto nos debe responder un json con los datos del registro que ha sido guardado:
+```JSON
+{
+  "active": true,
+  "city": "ElRama",
+  "country": "ni"
+}
+```
+
+Si queremos comprobar que realmente se ha guardado en la base de datos podemos usar esta linea en la terminal:
+```bash
+curl localhost:5000/active?city=ElRama&country=ni
+```
+La petición anterior nos devolverá el registro con los datos solicitados:
+```bash
+[1] 4620
+{
+  "active": true,
+  "cache": "miss",
+  "city": "ElRama",
+  "country": "ni"
+}
+[1]  + 4620 done       curl localhost:5000/active?city=ElRama
+```
+
+Si nos fijamos con detenimiento, en este caso la respuesta incluye un atributo llamado `"cache": "miss"` lo cual nos indica que la petición realizada ha llegado hasta la base de datos, pero si volvemos a hacer la misma petición veremos que ahora se nos devuelve el siguiente json con el atributo `"cache": "hit"` indicando que ahora los datos provienen de la cache, optimizando los tiempos de carga:
+```bash
+[1] 8309
+{
+  "active": true,
+  "cache": "hit",
+  "city": "ElRama",
+  "country": "ni"
+}
+[1]  + 8309 done       curl localhost:5000/active?city=ElRama
+```
+
+Para `actualizar` un registro podemos ejecutar la siguiente linea en terminal:
+```bash
+curl -X PUT -d '{"city":"El Rama","country":"ni","active":false}' -H "Content-Type: application/json" -H "Authorization: Bearer 2234hj234h2kkjjh42kjj2b20asd6918" localhost:5000/active
+```
+Como se puede notar, para lograr esta petición con éxito es necesario que junto con los datos enviado se mande tambien el token de autorización, de lo contrario la petición devolverá un error, Si la petición se ejecuta sin problemas nos devuelve un json con el registro actualizado:
+```JSON
+{
+  "active": false,
+  "city": "ElRama",
+  "country": "ni"
+}
+```
+En caso de error de autorizacion nos devuelve:
+```bash
+{
+  "app-id": "nica-ventas-disponibilidad",
+  "code": 403,
+  "detail": "Error 403, Forbidden",
+  "message": "Erorr 403, Forbidden",
+  "status": 403,
+  "title": "Error 403, Forbidden",
+  "version": "0.1"
+}
+```
+
+
+Si queremos estar totalmente seguros de que se ha actualizado en la base de datos podemos usar esta linea en la terminal:
+```bash
+curl localhost:5000/active?city=ElRama&country=ni
+```
+Ademas de devolvernos el registro actualizado, ahora veremos que tambien la cache ha sido borrada y se hizo la consulta en base de datos, tal como se nos indica con ` "cache": "miss"`:
+```bash
+[1] 18146
+{
+  "active": false,
+  "cache": "miss",
+  "city": "ElRama",
+  "country": "ni"
+}
+[1]  + 18146 done       curl localhost:5000/active?city=ElRama
+```
+
+
+### Servicio de consulta de condiciones de venta
+Como se mencionó al principio, este servicio tiene la particularidad que hace uso del API de OpenWeather para consultar el estado del clima de la ciudad donde se quiere realizar la venta, primeramente para este servicio tenemos disponible una ruta para consultar directamente el precio base de un producto del inventario:
+
+```bash
+curl http://127.0.0.1:5001/price/AZ00001
+```
+
+Con los datos de pruebas que hemos insertado en la base de datos tenemos disponibles 2 artículos para consultar por medio de su SKU, el AZ00001 y el AZ00002.
+
+Al ejecutar la peticioón anterior se nos debe devolver un json similar a esto:
+```JSON
+{
+  "description": "Paraguas de señora estampado",
+  "price": 10
+}
+```
+
+Para consultar la variación de precio de acuerdo al estado del clima en la ciudad donde se quiere realizar la venta podemos usar esta linea en la terminal:
+```bash
+curl -X POST -d '{"city":"Leon","country":"ni","sku":"AZ00001"}' -H "Content-Type: application/json" http://127.0.0.1:5001/quote
+```
+Si al momento de realizar la petición está lloviendo en la ciudad y país especificado entonces obtendremos una variación que nos permita vender mas caro los paraguas, al momento en el que se realizó la petición no estaba lloviendo en León por lo que el servicio me devuelve esta respuesta:
+```bash
+{
+  "base_price": 10.0,
+  "cache": "miss",
+  "city": "Leon",
+  "country": "ni",
+  "description": "Paraguas de se\u00f1ora estampado",
+  "sku": "AZ00001",
+  "variation": 0.5
+}
+```
+Esto nos indica que deberiamos vender los paraguas mas baratos, pero si hacemos la misma petición para los Helados con la siguiente linea:
+
+```bash
+curl -X POST -d '{"city":"Leon","country":"ni","sku":"AZ00002"}' -H "Content-Type: application/json" http://127.0.0.1:5001/quote
+```
+
+Ahora vemos que el producto solicitado para el paí y ciudad debe venderse mas caro, de acuerdo al clima de ese momento:
+```bash
+{
+  "base_price": 1.0,
+  "cache": "miss",
+  "city": "Leon",
+  "country": "ni",
+  "description": "Helado de sabor fresa",
+  "sku": "AZ00002",
+  "variation": 1.5
+}
+```
+
+## Construcción de los microservicios
 
 
 
-# Nivel 2
-
-Crear las tablas y los datos semilla en la base de datos
-docker-compose run nicaventas-us python seed_database.py
-
-Detener los serivicios orquetados con docker-compose
-docker-compose down
-
-
-
-# Nivel 4
-
-http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=3d3ea700fcb655178274e26b3af34ccd&units=metric
-
-
-https://redis-py.readthedocs.io/en/latest/
-
-
-https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/

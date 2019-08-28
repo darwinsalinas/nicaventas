@@ -8,7 +8,6 @@ services:
       - .env
     ports:
       - "54320:5432"
-    # Activar este volume si se quieren rellenar la base de datos
     volumes:
       - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     # volumes:
