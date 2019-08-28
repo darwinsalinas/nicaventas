@@ -1,11 +1,11 @@
 # Nivel 1
 
 ### Objetivos:
- - Desarrollar un microservicio en `flask` que implemente la llamada `[GET] /active` con una respuesta _dummy_ fija
- - Crear una imagen docker que contenga dicho microservicio y publicarla en `dockerhub`
+ - Desarrollar un micro servicio en `flask` que implemente la llamada `[GET] /active` con una respuesta _dummy_ fija
+ - Crear una imagen Docker que contenga dicho micro servicio y publicarla en `dockerhub`
 
-#### Procedimiento realizado para crear el API/Microservicio
-Para completar esta parte se desarrolló el API(microservicio) que responde una respuesta fija, en este caso el API está preparado para recibir dos parámetros(country y city) por medio de la URL en el endpoint `/active`
+#### Procedimiento realizado para crear el API/Micro servicio
+Para completar esta parte se desarrolló el API(micro servicio) que responde una respuesta fija, en este caso el API está preparado para recibir dos parámetros(country y city) por medio de la URL en el endpoint `/active`
 
 La estructura de carpetas y archivos para nuestra aplicación Flask es la siguiente:
 
@@ -65,7 +65,7 @@ def city_is_active():
     return jsonify(info)
 
 ```
-Como se puede apreciar en el fragmento de código anterior simplemente se reciben los parametros por URL utilizando `request` para recibirlos y almacenarlos en variables que posteriormente son asignadas a las claves de un diccionario de python y finalmente son devueltos en formato json, para lo cual se utiliza `jsonify` y el diccionario creado previamente llamado `info`
+Como se puede apreciar en el fragmento de código anterior simplemente se reciben los parámetros por URL utilizando `request` para recibirlos y almacenarlos en variables que posteriormente son asignadas a las claves de un diccionario de Python y finalmente son devueltos en formato json, para lo cual se utiliza `jsonify` y el diccionario creado previamente llamado `info`
 
 
 
@@ -73,11 +73,11 @@ Como se puede apreciar en el fragmento de código anterior simplemente se recibe
 - URL de dockerhub [(https://hub.docker.com/r/darwinsalinas/nicaventasnivel1)](https://hub.docker.com/r/darwinsalinas/nicaventasnivel1)
 
 
-Para crear una imagen de docker que pueda correr el código de nuestro Microservicio realizado con Flask se utilizó una imagen oficial de Docker para Python:
+Para crear una imagen de docker que pueda correr el código de nuestro Micro servicio realizado con Flask se utilizó una imagen oficial de Docker para Python:
 
 - URL de imagen de Python [(https://hub.docker.com/_/python)](https://hub.docker.com/_/python)
 
-Esta imagen contine lo necesario para correr código de python, por lo cual a partir de ella se ha creado la imagen que contiene el código del Microservicio, para reproducir una imagen igual a la que se ha creado debemos escribir el siguiente código en nuestro archivo Dockerfile:
+Esta imagen contiene lo necesario para correr código de Python, por lo cual a partir de ella se ha creado la imagen que contiene el código del Micro servicio, para reproducir una imagen igual a la que se ha creado debemos escribir el siguiente código en nuestro archivo Dockerfile:
 
 ```
 FROM python
@@ -99,7 +99,7 @@ docker build -t darwinsalinas/nicaventasnivel1 .
 ```
 
 
-Para subir nuestra imagen recien creada ejecutamos la siguiente linea en terminal:
+Para subir nuestra imagen recién creada ejecutamos la siguiente linea en terminal:
 
 ```bash
 docker login && docker push darwinsalinas/nicaventasnivel1

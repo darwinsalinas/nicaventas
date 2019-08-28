@@ -1,7 +1,7 @@
 # Nivel 4
 
 ### Descripción general
-La aplicación de NicaVentas cuenta con dos microservicios con una estructura bastante simple, los cuales fueron creados para interactuar con el servicio de base de datos(postgres) y el servicio de caché(redis), el primero de estos dos servicios es el servicio de consulta de disponilidad de ventas por pais y ciudades, el segundo es el servicio de consulta de condiciones de venta, en este segundo servicio se hace uso del API de OpenWeatherMaps para consultar el estado del clima en el pais y ciudad solicitado, esto con el fin de poder hacer una venta diferenciada de acuerdo al clima que se esté presentado en ese momento en la ciudad.
+La aplicación de NicaVentas cuenta con dos micro servicios con una estructura bastante simple, los cuales fueron creados para interactuar con el servicio de base de datos(postgres) y el servicio de caché(redis), el primero de estos dos servicios es el servicio de consulta de disponibilidad de ventas por país y ciudades, el segundo es el servicio de consulta de condiciones de venta, en este segundo servicio se hace uso del API de **OpenWeatherMaps** para consultar el estado del clima en el Pais y ciudad solicitado, esto con el fin de poder hacer una venta diferenciada de acuerdo al clima que se esté presentado en ese momento en la ciudad.
 
 #### Estructura de carpetas y archivos para la aplicación NicaVentas:
 
@@ -30,7 +30,7 @@ src
 
 ## Servicio de consulta de disponibilidad de ventas
 
-Servicio web se emplea para consultar si se está autorizada la venta de productos en general en una ciudad concreta de un país haciendo useo del endpoint `[GET] /active?city=leon&country=ni`.
+Servicio web se emplea para consultar si se está autorizada la venta de productos en general en una ciudad concreta de un país haciendo uso del endpoint `[GET] /active?city=leon&country=ni`.
 
 El resultado de la invocación de este endpoint, a modo de ejemplo, será el siguiente:
 
@@ -101,9 +101,9 @@ Respondería, por ejemplo:
 
 El precio de los paraguas bajo estas condiciones sería de `10 x 1.5 = 15€`.
 
-Para calcular la respuesta adecuada, el endpoint `[POST] /quote` dispondrá del API de un tercero, concretamente de OpenWeather, para consultar el tiempo meteorológico de una ciudad concreta de un país.
+Para calcular la respuesta adecuada, el endpoint `[POST] /quote` dispondrá del API de un tercero, concretamente de **OpenWeather**, para consultar el tiempo meteorológico de una ciudad concreta de un país.
 
-Con la información devuelta por el API de OpenWeather estamos en condiciones de comparar con las reglas de variación que hayamos creado en la base de datos:
+Con la información devuelta por el API de **OpenWeather** estamos en condiciones de comparar con las reglas de variación que hayamos creado en la base de datos:
 
 
 | id_regla | ciudad | pais |     SKU | min_condition | max_condition | variation |
@@ -120,11 +120,11 @@ Supongamos que preguntamos al servicio meteorológico sobre las condiciones en L
 
 - URL de dockerhub del [servicio de consulta de condiciones de venta](https://cloud.docker.com/repository/docker/darwinsalinas/nicaventas-condiciones-nivel4)
 
-Para crear una imagen de docker que pueda correr el código de nuestros Microservicios realizados con Flask se utilizó una imagen oficial de Docker para Python:
+Para crear una imagen de Docker que pueda correr el código de nuestros Micro servicios realizados con Flask se utilizó una imagen oficial de Docker para Python:
 
 - URL de [imagen de Python](https://hub.docker.com/_/python)
 
-Esta imagen contine lo necesario para correr código de python, por lo cual a partir de ella se ha creado la imagen que contiene el código del Microservicio, para reproducir una imagen igual a la que se ha creado debemos escribir el siguiente código en nuestro archivo Dockerfile:
+Esta imagen contiene lo necesario para correr código de Python, por lo cual a partir de ella se ha creado la imagen que contiene el código del Micro servicio, para reproducir una imagen igual a la que se ha creado debemos escribir el siguiente código en nuestro archivo Dockerfile:
 
 ```
 FROM python
@@ -140,7 +140,7 @@ CMD /wait && python app.py
 
 Puedes reemplazar el nombre y correo del `manteiner` de la imagen
 
-Para construir las imagenes de docker y etiquetarlas ejecutamos esta línea en terminal dentro de la carpeta correspondiente de cada micro servicio:
+Para construir las imágenes de Docker y etiquetarlas ejecutamos esta línea en terminal dentro de la carpeta correspondiente de cada micro servicio:
 
 ```bash
 docker build -t darwinsalinas/nicaventas-disponibilidad-nivel4 .
@@ -148,16 +148,17 @@ docker build -t darwinsalinas/nicaventas-condiciones-nivel4 .
 ```
 
 
-Para subir nuestras imágenes recien creadas ejecutamos lo siguiente en terminal:
+Para subir nuestras imágenes recién creadas ejecutamos lo siguiente en terminal:
 
 ```bash
 docker login && docker push darwinsalinas/nicaventas-condiciones-nivel4
 docker login && docker push darwinsalinas/nicaventas-disponibilidad-nivel4
 ```
+
 Al ejecutar las lineas de arriba se nos va a solicitar nuestras credenciales de dockerhub.
 
 
-Para correr los servicios orquestados con docker-compose se require la presencia de un archivo de entorno `.env` que contenga todas las credenciales y configuraciones de la aplicacion:
+Para correr los servicios orquestados con docker-compose se requiere la presencia de un archivo de entorno `.env` que contenga todas las credenciales y configuraciones de la aplicación:
 
 ```bash
 POSTGRES_DB=nicaventas
@@ -173,7 +174,7 @@ REDIS_LOCATION=redis
 API_KEY_OWM=3d3ea700fcb655178274e26b3af34ccd
 ```
 
-Aparte del archivo de configuración anteriormente descrito, tambien necesitamos el script de `initdb.sql` para crear las tablas y rellenarla con datos para realizar pruebas:
+Aparte del archivo de configuración anteriormente descrito, también necesitamos el script de `initdb.sql` para crear las tablas y rellenarla con datos para realizar pruebas:
 
 ```SQL
 CREATE TABLE "public"."countries" (
@@ -253,7 +254,7 @@ INSERT INTO "public"."rules"("country", "city", "sku", "min_condition", "max_con
 ```
 
 ### El archivo dcoker-compose
-Para poner en funcionamiento los dos micro servicios, mas la base de datos y el servicio de cache con un solo comando, en este ejemplo se hace uso del orquestador docker compose, compose utiliza un archivo YML para configurar y arrancar los servicios de la aplicación.
+Para poner en funcionamiento los dos micro servicios, mas la base de datos y el servicio de cache con un solo comando, en este ejemplo se hace uso del orquestador Docker compose, compose utiliza un archivo YML para configurar y arrancar los servicios de la aplicación.
 
 A continuación las lineas necesarias en el archivo `docker-compose.yml`
 ```bash
@@ -320,7 +321,7 @@ Si queremos poner a correr ls servicios en segundo plano podemos agregarle el fl
 docker-compose up -d
 ```
 
-Si pusiste los servicios en segundo plano puedes ver lo que ocurre dentro de los contendores con el comando:
+Si pusiste los servicios en segundo plano puedes ver lo que ocurre dentro de los contenedores con el comando:
 
 ```bash
 docker logs -f nicaventas-db
@@ -328,11 +329,11 @@ docker logs -f nicaventas-db
 
 
 
-## Probar el funcionamiento de los microservicios
+## Probar el funcionamiento de los micro servicios
 
 ### Servicio de consulta de disponibilidad de venta
 
-Probar con Postman, el navegador o tambien lo puedes hacer con: `curl localhost:5000/active?city=leon&country=ni`. La respuesta que devuelve debe ser una respuesta JSON como esto:
+Probar con Postman, el navegador o también lo puedes hacer con: `curl localhost:5000/active?city=leon&country=ni`. La respuesta que devuelve debe ser una respuesta JSON como esto:
 ```bash
 [1] 12962
 {
@@ -389,7 +390,7 @@ Para `actualizar` un registro podemos ejecutar la siguiente linea en terminal:
 ```bash
 curl -X PUT -d '{"city":"El Rama","country":"ni","active":false}' -H "Content-Type: application/json" -H "Authorization: Bearer 2234hj234h2kkjjh42kjj2b20asd6918" localhost:5000/active
 ```
-Como se puede notar, para lograr esta petición con éxito es necesario que junto con los datos enviado se mande tambien el token de autorización, de lo contrario la petición devolverá un error, Si la petición se ejecuta sin problemas nos devuelve un json con el registro actualizado:
+Como se puede notar, para lograr esta petición con éxito es necesario que junto con los datos enviado se mande también el token de autorización, de lo contrario la petición devolverá un error, Si la petición se ejecuta sin problemas nos devuelve un json con el registro actualizado:
 ```JSON
 {
   "active": false,
@@ -397,7 +398,7 @@ Como se puede notar, para lograr esta petición con éxito es necesario que junt
   "country": "ni"
 }
 ```
-En caso de error de autorizacion nos devuelve:
+En caso de error de autorización nos devuelve:
 ```bash
 {
   "app-id": "nica-ventas-disponibilidad",
@@ -415,7 +416,7 @@ Si queremos estar totalmente seguros de que se ha actualizado en la base de dato
 ```bash
 curl localhost:5000/active?city=ElRama&country=ni
 ```
-Ademas de devolvernos el registro actualizado, ahora veremos que tambien la cache ha sido borrada y se hizo la consulta en base de datos, tal como se nos indica con ` "cache": "miss"`:
+Ademas de devolvernos el registro actualizado, ahora veremos que también la cache ha sido borrada y se hizo la consulta en base de datos, tal como se nos indica con ` "cache": "miss"`:
 ```bash
 [1] 18146
 {
@@ -429,7 +430,7 @@ Ademas de devolvernos el registro actualizado, ahora veremos que tambien la cach
 
 
 ### Servicio de consulta de condiciones de venta
-Como se mencionó al principio, este servicio tiene la particularidad que hace uso del API de OpenWeather para consultar el estado del clima de la ciudad donde se quiere realizar la venta, primeramente para este servicio tenemos disponible una ruta para consultar directamente el precio base de un producto del inventario:
+Como se mencionó al principio, este servicio tiene la particularidad que hace uso del API de **OpenWeather** para consultar el estado del clima de la ciudad donde se quiere realizar la venta, primeramente para este servicio tenemos disponible una ruta para consultar directamente el precio base de un producto del inventario:
 
 ```bash
 curl http://127.0.0.1:5001/price/AZ00001
@@ -437,7 +438,7 @@ curl http://127.0.0.1:5001/price/AZ00001
 
 Con los datos de pruebas que hemos insertado en la base de datos tenemos disponibles 2 artículos para consultar por medio de su SKU, el AZ00001 y el AZ00002.
 
-Al ejecutar la peticioón anterior se nos debe devolver un json similar a esto:
+Al ejecutar la petición anterior se nos debe devolver un json similar a esto:
 ```JSON
 {
   "description": "Paraguas de señora estampado",
@@ -461,13 +462,13 @@ Si al momento de realizar la petición está lloviendo en la ciudad y país espe
   "variation": 0.5
 }
 ```
-Esto nos indica que deberiamos vender los paraguas mas baratos, pero si hacemos la misma petición para los Helados con la siguiente linea:
+Esto nos indica que deberíamos vender los paraguas mas baratos, pero si hacemos la misma petición para los Helados con la siguiente linea:
 
 ```bash
 curl -X POST -d '{"city":"Leon","country":"ni","sku":"AZ00002"}' -H "Content-Type: application/json" http://127.0.0.1:5001/quote
 ```
 
-Ahora vemos que el producto solicitado para el paí y ciudad debe venderse mas caro, de acuerdo al clima de ese momento:
+Ahora vemos que el producto solicitado para el país y ciudad debe venderse mas caro, de acuerdo al clima de ese momento:
 ```bash
 {
   "base_price": 1.0,
@@ -480,7 +481,7 @@ Ahora vemos que el producto solicitado para el paí y ciudad debe venderse mas c
 }
 ```
 
-## Construcción de los microservicios
+## Construcción de los micro servicios
 Los servicios para el API fueron creados usando `Python` y `Flask` y algunas librerías de Python como Flask-SQLAlchemy, requests, redis, a continuación el código fuente de Python para cada uno de los micro servicios
 
 ### Servicio de consulta de disponibilidad
@@ -947,7 +948,7 @@ class Rule(db.Model):
 ```
 
 ### El archivo `requirements.txt`
-Se puede utilizar el mismo contendio para el archivo requirements de ambos servicios:
+Se puede utilizar el mismo contenido para el archivo requirements de ambos servicios:
 ```
 alembic==1.0.11
 Click==7.0
