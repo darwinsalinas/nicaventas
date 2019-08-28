@@ -53,7 +53,7 @@ Modificar el estado de actividad de una ciudad de un país:
 **Method**: `PUT`
 **Auth required**: YES
 **Body format**: `Content-type: application/json`
-**Body payload**: 
+**Body payload**:
 ```
 {
   "active": true,
@@ -99,9 +99,9 @@ Respondería, por ejemplo:
 }
 ```
 
-El precio de los paraguas bajo estas condiciones sería de `10 x 1.5 = 15€`. 
+El precio de los paraguas bajo estas condiciones sería de `10 x 1.5 = 15€`.
 
-Para calcular la respuesta adecuada, el endpoint `[POST] /quote` dispondrá del API de un tercero, concretamente de OpenWeather, para consultar el tiempo meteorológico de una ciudad concreta de un país. 
+Para calcular la respuesta adecuada, el endpoint `[POST] /quote` dispondrá del API de un tercero, concretamente de OpenWeather, para consultar el tiempo meteorológico de una ciudad concreta de un país.
 
 Con la información devuelta por el API de OpenWeather estamos en condiciones de comparar con las reglas de variación que hayamos creado en la base de datos:
 
